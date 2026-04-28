@@ -41,57 +41,57 @@ model User {
 
 model Profile {
   id     String @id @default(cuid())
-  userId String @unique
+  userId String @unique @map("userid")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  displayName String?
-  bio         String? @db.Text
-  location    String?
-  occupation  String?
-  tags        String[]
+  displayName String? @map("displayname")
+  bio         String? @db.Text @map("bio")
+  location    String? @map("location")
+  occupation  String? @map("occupation")
+  tags        String[] @map("tags")
   
-  accentColor  String   @default("#8b5cf6")
-  font         String   @default("Inter")
-  borderRadius String   @default("16px")
-  effects      Json     @default("{}")
-  layout       String   @default("floating")
-  avatarShape  String   @default("circle")
+  accentColor  String   @default("#8b5cf6") @map("accentcolor")
+  font         String   @default("Inter") @map("font")
+  borderRadius String   @default("16px") @map("borderradius")
+  effects      Json     @default("{}") @map("effects")
+  layout       String   @default("floating") @map("layout")
+  avatarShape  String   @default("circle") @map("avatarshape")
   
-  bannerUrl String?
+  bannerUrl String? @map("bannerurl")
   
-  pageTitle       String?
-  ogImage         String?
-  commentsEnabled Boolean @default(true)
+  pageTitle       String? @map("pagetitle")
+  ogImage         String? @map("ogimage")
+  commentsEnabled Boolean @default(true) @map("commentsenabled")
   
-  backgroundType  String  @default("solid")
-  backgroundValue String  @default("#0a0a0a")
+  backgroundType  String  @default("solid") @map("backgroundtype")
+  backgroundValue String  @default("#0a0a0a") @map("backgroundvalue")
   
-  cardStyle String @default("glass")
+  cardStyle String @default("glass") @map("cardstyle")
   
-  glowEnabled Boolean @default(false)
-  tiltEnabled Boolean @default(false)
-  animationEnabled Boolean @default(true)
+  glowEnabled Boolean @default(false) @map("glowenabled")
+  tiltEnabled Boolean @default(false) @map("tiltenabled")
+  animationEnabled Boolean @default(true) @map("animationenabled")
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
   
   @@map("profiles")
 }
 
 model Link {
   id        String   @id @default(cuid())
-  profileId String
-  userId    String
+  profileId String   @map("profileid")
+  userId    String   @map("userid")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   title String
   url   String
   icon  String?
-  order Int     @default(0)
-  style String  @default("filled")
+  order Int     @default(0) @map("order")
+  style String  @default("filled") @map("style")
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
   
   @@index([userId])
   @@map("links")
@@ -102,7 +102,7 @@ model Badge {
   name        String @unique
   description String
   icon        String
-  type        String @default("earned")
+  type        String @default("earned") @map("type")
   
   users UserBadge[]
   
@@ -111,12 +111,12 @@ model Badge {
 
 model UserBadge {
   id     String @id @default(cuid())
-  userId String
+  userId String @map("userid")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badgeId String
+  badgeId String @map("badgeid")
   badge   Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
   
-  earnedAt DateTime @default(now())
+  earnedAt DateTime @default(now()) @map("earnedat")
   
   @@unique([userId, badgeId])
   @@map("user_badges")
@@ -126,20 +126,20 @@ model Template {
   id          String @id @default(cuid())
   name        String
   description String @db.Text
-  previewImage String
+  previewImage String @map("previewimage")
   tags        String[]
   
-  creatorId String
+  creatorId String @map("creatorid")
   creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
   
-  status      String  @default("pending")
-  usageCount  Int     @default(0)
-  isPremium   Boolean @default(false)
+  status      String  @default("pending") @map("status")
+  usageCount  Int     @default(0) @map("usagecount")
+  isPremium   Boolean @default(false) @map("ispremium")
   
   config Json @default("{}")
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
   
   @@index([status])
   @@map("templates")
@@ -147,13 +147,13 @@ model Template {
 
 model Widget {
   id        String @id @default(cuid())
-  userId    String
+  userId    String @map("userid")
   user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   type    String
   config  Json    @default("{}")
-  enabled Boolean @default(true)
-  order   Int     @default(0)
+  enabled Boolean @default(true) @map("enabled")
+  order   Int     @default(0) @map("order")
   
   @@index([userId])
   @@map("widgets")
@@ -161,13 +161,13 @@ model Widget {
 
 model Track {
   id     String @id @default(cuid())
-  userId String
+  userId String @map("userid")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   title    String
-  embedUrl String?
-  style    String @default("compact")
-  order    Int    @default(0)
+  embedUrl String? @map("embedurl")
+  style    String @default("compact") @map("style")
+  order    Int    @default(0) @map("order")
   
   @@index([userId])
   @@map("tracks")
@@ -175,11 +175,11 @@ model Track {
 
 model ProfileView {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String   @map("userid")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  viewedAt DateTime @default(now())
-  ipHash   String?
+  viewedAt DateTime @default(now()) @map("viewedat")
+  ipHash   String? @map("iphash")
   
   @@index([userId])
   @@index([viewedAt])
@@ -188,14 +188,14 @@ model ProfileView {
 
 model Payment {
   id     String @id @default(cuid())
-  userId String
+  userId String @map("userid")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   amount   Decimal @db.Decimal(10, 2)
-  currency String  @default("USD")
-  status   String  @default("pending")
+  currency String  @default("USD") @map("currency")
+  status   String  @default("pending") @map("status")
   
-  stripePaymentIntentId String?
+  stripePaymentIntentId String? @map("stripepaymentintentid")
   
   createdAt DateTime @default(now()) @map("createdat")
   updatedAt DateTime @updatedAt @map("updatedat")

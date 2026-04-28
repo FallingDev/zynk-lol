@@ -33,6 +33,8 @@ model User {
   templates   Template[]
   views       ProfileView[]
   payments    Payment[]
+  accounts    Account[]
+  sessions    Session[]
   
   @@map("users")
 }

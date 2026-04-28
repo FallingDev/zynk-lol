@@ -33,7 +33,7 @@ export async function GET() {
       prisma.link.count(),
       prisma.profileView.count(),
       prisma.template.count({ where: { status: 'pending' } }),
-      prisma.user.count({ where: { isPremium: true } }),
+      prisma.user.count({ where: { ispremium: true } }),
     ])
 
     return NextResponse.json({

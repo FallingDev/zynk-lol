@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 import { GlassCard } from '@/components/ui/GlassCard'
 import { Eye, MousePointerClick, Link2, TrendingUp, User, Palette, ExternalLink } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 async function getDashboardStats(userId: string) {
   const totalViews = await prisma.profileView.count({
     where: { userId },

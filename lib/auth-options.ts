@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
             name: user.username,
             image: user.avatar,
             username: user.username,
-            isPremium: user.isPremium,
+            isPremium: user.ispremium,
             role: user.role,
           }
         } catch {

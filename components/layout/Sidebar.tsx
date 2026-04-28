@@ -17,6 +17,7 @@ import {
   Settings,
   ExternalLink,
   LogOut,
+  Shield,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
@@ -67,6 +68,22 @@ export function Sidebar() {
             </Link>
           )
         })}
+        
+        {/* Admin Link - Only for staff */}
+        {session?.user?.role && session.user.role !== 'user' && (
+          <Link
+            href="/dashboard/admin"
+            className={cn(
+              'flex items-center gap-3 px-4 py-2.5 rounded-[12px] text-sm font-medium transition-all duration-200 mt-4',
+              pathname === '/dashboard/admin'
+                ? 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
+                : 'text-violet-400/80 hover:text-violet-400 hover:bg-violet-500/10'
+            )}
+          >
+            <Shield className="h-4 w-4" />
+            Admin Panel
+          </Link>
+        )}
       </nav>
 
       {/* User Card */}

@@ -9,6 +9,7 @@ declare module 'next-auth' {
       image?: string | null
       username: string
       isPremium: boolean
+      role: string
     }
   }
 
@@ -16,6 +17,7 @@ declare module 'next-auth' {
     id: string
     username: string
     isPremium: boolean
+    role: string
   }
 }
 
@@ -24,5 +26,6 @@ declare module 'next-auth/jwt' {
     id?: string
     username?: string
     isPremium?: boolean
+    role?: string
   }
 }

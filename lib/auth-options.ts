@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
           discordId: profile.id,
           discordUsername: profile.username,
           isPremium: false,
+          role: 'user',
         }
       },
     }),
@@ -63,6 +64,7 @@ export const authOptions: NextAuthOptions = {
             image: user.avatar,
             username: user.username,
             isPremium: user.isPremium,
+            role: user.role,
           }
         } catch {
           return null
@@ -71,11 +73,30 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Create profile for Discord users if it doesn't exist
+      if (account?.provider === 'discord' && user.id) {
+        const existingProfile = await prisma.profile.findUnique({
+          where: { userId: user.id }
+        })
+        
+        if (!existingProfile) {
+          await prisma.profile.create({
+            data: {
+              userId: user.id,
+              displayName: user.name || user.username,
+            }
+          })
+        }
+      }
+      return true
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
         token.username = user.username
         token.isPremium = user.isPremium
+        token.role = user.role
       }
       return token
     },
@@ -84,6 +105,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
         session.user.username = token.username as string
         session.user.isPremium = token.isPremium as boolean
+        session.user.role = token.role as string
       }
       return session
     },

@@ -21,7 +21,7 @@ import {
 import { Button } from '@/components/ui/Button'
 
 const navItems = [
-  { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/overview', label: 'Overview', icon: LayoutDashboard },
   { href: '/dashboard/profile', label: 'Profile', icon: User },
   { href: '/dashboard/appearance', label: 'Appearance', icon: Palette },
   { href: '/dashboard/links', label: 'Links', icon: Link2 },

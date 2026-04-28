@@ -12,18 +12,18 @@ model User {
   email         String    @unique
   password      String?
   username      String    @unique
-  emailVerified DateTime?
+  emailVerified DateTime? @map("emailverified")
   
-  discordId       String? @unique
-  discordUsername String?
+  discordId       String? @unique @map("discordid")
+  discordUsername String? @map("discordusername")
   avatar          String?
   
-  role        String    @default("user") // user, mod, admin
-  isPremium   Boolean   @default(false)
-  premiumSince DateTime?
+  role        String    @default("user") @map("role")
+  isPremium   Boolean   @default(false) @map("ispremium")
+  premiumSince DateTime? @map("premiumsince")
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
   
   profile     Profile?
   links       Link[]
@@ -195,8 +195,48 @@ model Payment {
   
   stripePaymentIntentId String?
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("createdat")
+  updatedAt DateTime @updatedAt @map("updatedat")
   
   @@map("payments")
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("userid")
+  type              String
+  provider          String
+  providerAccountId String  @map("provideraccountid")
+  refresh_token     String? @map("refresh_token")
+  access_token      String? @map("access_token")
+  expires_at        Int?    @map("expires_at")
+  token_type        String? @map("token_type")
+  scope             String?
+  id_token          String? @map("id_token")
+  session_state     String? @map("session_state")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("sessiontoken")
+  userId       String   @map("userid")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }

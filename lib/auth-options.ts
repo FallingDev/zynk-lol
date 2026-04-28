@@ -76,17 +76,29 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       // Create profile for Discord users if it doesn't exist
       if (account?.provider === 'discord' && user.id) {
-        const existingProfile = await prisma.profile.findUnique({
-          where: { userId: user.id }
-        })
-        
-        if (!existingProfile) {
-          await prisma.profile.create({
-            data: {
-              userId: user.id,
-              displayName: user.name || user.username,
-            }
+        try {
+          // Check if user exists in database first
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id }
           })
+          
+          if (dbUser) {
+            const existingProfile = await prisma.profile.findUnique({
+              where: { userId: user.id }
+            })
+            
+            if (!existingProfile) {
+              await prisma.profile.create({
+                data: {
+                  userId: user.id,
+                  displayName: user.name || user.username || dbUser.username,
+                }
+              })
+            }
+          }
+        } catch (error) {
+          console.error('Error creating profile for Discord user:', error)
+          // Don't fail the sign-in if profile creation fails
         }
       }
       return true

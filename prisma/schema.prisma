@@ -12,18 +12,18 @@ model User {
   email         String?   @unique
   password      String?
   username      String    @unique
-  emailverified DateTime?
+  emailVerified DateTime?
   
-  discordid       String? @unique @map("discordid")
-  discordusername String? @map("discordusername")
+  discordId       String? @unique
+  discordUsername String?
   avatar          String?
   
   role        String    @default("user")
-  ispremium   Boolean   @default(false) @map("ispremium")
-  premiumsince DateTime? @map("premiumsince")
+  isPremium   Boolean   @default(false)
+  premiumSince DateTime?
   
-  createdat DateTime @default(now()) @map("createdat")
-  updatedat DateTime @updatedAt @map("updatedat")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   
   profile     Profile?
   links       Link[]
